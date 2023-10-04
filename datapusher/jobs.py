@@ -293,6 +293,21 @@ def get_resource(resource_id, ckan_url, api_key):
 
     return r.json()['result']
 
+def get_package(package_id, ckan_url, api_key):
+    """
+    Gets available information about the package from CKAN
+    """
+    url = get_url('pacakge_show', ckan_url)
+    r = requests.post(url,
+                      verify=SSL_VERIFY,
+                      data=json.dumps({'id': package_id}),
+                      headers={'Content-Type': 'application/json',
+                               'Authorization': api_key}
+                      )
+    check_response(r, url, 'CKAN')
+
+    return r.json()['result']
+
 
 def get_data_response(url, **kwargs):
 
@@ -349,6 +364,21 @@ def push_to_datastore(task_id, input, dry_run=False):
         # try again in 5 seconds just incase CKAN is slow at adding resource
         time.sleep(5)
         resource = get_resource(resource_id, ckan_url, api_key)
+
+    # Get package data of the resource
+    package_id = resource.get('package_id')
+    try:
+        package = get_package(package_id, ckan_url, api_key)
+    except util.JobError as e:
+        # try again in 5 seconds just incase CKAN is slow at adding resource
+        time.sleep(5)
+        package = get_package(package_id, ckan_url, api_key)
+
+    logger.info(f"Fetched package info: {package}")
+    package_metadata = {}
+    for metadata in package.get('extras'):
+        package_metadata[metadata.get('key')] = metadata.get('value')
+    logger.info(f"Fetched package extras metadata: {package_metadata}")
 
     # check if the resource url_type is a datastore
     if resource.get('url_type') == 'datastore':
