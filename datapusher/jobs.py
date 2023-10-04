@@ -297,7 +297,7 @@ def get_package(package_id, ckan_url, api_key):
     """
     Gets available information about the package from CKAN
     """
-    url = get_url('pacakge_show', ckan_url)
+    url = get_url('package_show', ckan_url)
     r = requests.post(url,
                       verify=SSL_VERIFY,
                       data=json.dumps({'id': package_id}),
