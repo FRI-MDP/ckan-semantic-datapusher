@@ -22,6 +22,7 @@ import messytables
 import ckanserviceprovider.job as job
 import ckanserviceprovider.util as util
 from ckanserviceprovider import web
+from evidenca_dolznikov_transformer import push_to_fuseki
 
 if locale.getdefaultlocale()[0]:
     lang, encoding = locale.getdefaultlocale()
@@ -374,7 +375,7 @@ def push_to_datastore(task_id, input, dry_run=False):
         time.sleep(5)
         package = get_package(package_id, ckan_url, api_key)
 
-    logger.info(f"Fetched package info: {package}")
+    logger.info(f"Package info successfully fetched.")
     package_metadata = {}
     for metadata in package.get('extras'):
         package_metadata[metadata.get('key')] = metadata.get('value')
@@ -458,6 +459,8 @@ def push_to_datastore(task_id, input, dry_run=False):
         return
 
     resource['hash'] = file_hash
+
+    push_to_fuseki(logger, tmp, resource, package.get("license_url"), package_metadata.get("DATASET_SCHEMA_URI"), package_metadata.get("DATASET_URI"))
 
     try:
         table_set = messytables.any_tableset(tmp, mimetype=ct, extension=ct)

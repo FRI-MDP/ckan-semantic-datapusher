@@ -6,3 +6,4 @@ certifi
 requests[security]==2.27.1
 flask==2.3.3
 werkzeug==2.3.7
+rdflib==7.0.0
