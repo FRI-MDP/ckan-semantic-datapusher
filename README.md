@@ -1,14 +1,30 @@
-[![Tests](https://github.com/ckan/datapusher/actions/workflows/test.yml/badge.svg)](https://github.com/ckan/datapusher/actions/workflows/test.yml)
-[![Latest Version](https://img.shields.io/pypi/v/datapusher.svg)](https://pypi.python.org/pypi/datapusher/)
-[![Downloads](https://img.shields.io/pypi/dm/datapusher.svg)](https://pypi.python.org/pypi/datapusher/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/datapusher.svg)](https://pypi.python.org/pypi/datapusher/)
-[![License](https://img.shields.io/badge/license-GPL-blue.svg)](https://pypi.python.org/pypi/datapusher/)
-
 [CKAN Service Provider]: https://github.com/ckan/ckan-service-provider
 [Messytables]: https://github.com/okfn/messytables
 
+# CKAN Semantic DataPusher
 
-# DataPusher
+CKAN Semantic DataPusher is a fork of original DataPusher component (original documentation is preserved below) that adds functionality to support semantic data map within an CKAN instance.
+
+Current implementation is based on DCAT and other ontologies, applied to the Slovenian data map ontology. For more information about the project please see the main repository [https://github.com/FRI-MDP/Podatkovni-zemljevid-2023](https://github.com/FRI-MDP/Podatkovni-zemljevid-2023) or contact [Ministry of Digital Transformation of the Republic of Slovenia](https://www.gov.si/en/state-authorities/ministries/ministry-of-digital-transformation/), contact person Miha Jesenko. Project was designed and developed by Dejan Lavbič and Slavko Žitnik.
+
+Figure below shows a high-level architecture usage of a semantic data pusher. 
+
+Main functionality is updated in the *jobs.py* (lines 466-475), where *push_to_fuseki()* function is called. Two of the parameters *DATASET_SCHEMA_URI* and *DATASET_URI* are used to identify a resource to be semantically processed. These two parameters need to be set on a CKAN dataset level and are then used for all uploaded distributions. All other functionality of original data pusher implementation is preserved.
+
+The main Semantic DataPusher implementation resides in *semantics.py.* The function *push_to_fuseki()* is used to call an appropriate function for mapping the upload to a distribution into predefined semantic format. All the data is stored to a Fuseki server. Specific distribution functions could contain implementations, specific to distribution nature. During the project we identified the following natures:
+
+  (a) data in OPSI,
+  (b) data at the provider  (i.e. »harvesting resource«),
+  (c) external Web page data,
+  (d) data with an existent semantic schema and
+  (e) semantic data in OPSI.
+
+The project is set to be directly used by the main project [https://github.com/FRI-MDP/ckan-docker](https://github.com/FRI-MDP/ckan-docker) which pulls this git repository and builds it within Docker images build. See the project for running the Semantic DataPusher.
+
+![](images/semantic.png)
+Figure: Architecture of updated CKAN to support semantic data map functionality.
+
+# DataPusher (original documentation)
 
 DataPusher is a standalone web service that automatically downloads any tabular
 data files like CSV or Excel from a CKAN site's resources when they are added to the

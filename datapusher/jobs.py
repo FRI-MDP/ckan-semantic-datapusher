@@ -557,7 +557,7 @@ def push_to_datastore(task_id, input, dry_run=False):
                 if type_override in list(_TYPE_MAPPING.values()):
                     h['type'] = type_override
 
-    logger.info('Determined headers and types (JUHUHU! ;)): {headers}'.format(
+    logger.info('Determined headers and types: {headers}'.format(
         headers=headers_dicts))
 
     if dry_run:
