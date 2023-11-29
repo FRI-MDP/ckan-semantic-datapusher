@@ -13,11 +13,11 @@ Main functionality is updated in the *jobs.py* (lines 466-475), where *push_to_f
 
 The main Semantic DataPusher implementation resides in *semantics.py.* The function *push_to_fuseki()* is used to call an appropriate function for mapping the upload to a distribution into predefined semantic format. All the data is stored to a Fuseki server. Specific distribution functions could contain implementations, specific to distribution nature. During the project we identified the following natures:
 
-  (a) data in OPSI,
-  (b) data at the provider  (i.e. »harvesting resource«),
-  (c) external Web page data,
-  (d) data with an existent semantic schema and
-  (e) semantic data in OPSI.
+  - (a) data in OPSI,
+  - (b) data at the provider  (i.e. »harvesting resource«),
+  - (c) external Web page data,
+  - (d) data with an existent semantic schema and
+  - (e) semantic data in OPSI.
 
 The project is set to be directly used by the main project [https://github.com/FRI-MDP/ckan-docker](https://github.com/FRI-MDP/ckan-docker) which pulls this git repository and builds it within Docker images build. See the project for running the Semantic DataPusher.
 
