@@ -463,9 +463,10 @@ def push_to_datastore(task_id, input, dry_run=False):
 
     resource['hash'] = file_hash
 
-    # Prepare file in a text mode
+    # Prepare file in a text mode (above it was stream in binary mode;
+    # note that this may be problematic for large files)
     tmp_file_fuseki = tempfile.TemporaryFile(mode='w+t', encoding="utf8")
-    tmp_file_fuseki.write(get_data_response(url, **kwargs).text.encode('utf-8'))
+    tmp_file_fuseki.write(get_data_response(url).text.encode('utf-8'))
     tmp_file_fuseki.seek(0)
     # Push to fuseki if schema mapping exists
     semantics.push_to_fuseki(logger, tmp_file_fuseki, resource, 
