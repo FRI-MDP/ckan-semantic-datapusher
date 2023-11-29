@@ -463,8 +463,12 @@ def push_to_datastore(task_id, input, dry_run=False):
 
     resource['hash'] = file_hash
 
+    # Prepare file in a text mode
+    tmp_file_fuseki = tempfile.TemporaryFile(mode='w+t', encoding="utf8")
+    tmp_file_fuseki.write(response.text.encode('utf-8'))
+    tmp_file_fuseki.seek(0)
     # Push to fuseki if schema mapping exists
-    semantics.push_to_fuseki(logger, tmp, resource, 
+    semantics.push_to_fuseki(logger, tmp_file_fuseki, resource, 
                    package.get("license_url"), 
                    package_metadata.get("DATASET_SCHEMA_URI"), 
                    package_metadata.get("DATASET_URI"))
